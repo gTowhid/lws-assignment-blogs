@@ -1,19 +1,25 @@
 import { Link } from 'react-router-dom';
-import image from '../assets/git.webp';
 
-export default function RelatedPost() {
-    return <div className="card">
-    <Link to="/posts/1">
-      <img src={image} className="card-image" alt="" />
-    </Link>
-    <div className="p-4">
-      <Link to="/posts/1" className="text-lg post-title lws-RelatedPostTitle">
-        Top Github Alternatives
+export default function RelatedPost({ blog }) {
+  const { id, title, image, tags, createdAt } = blog;
+
+  return (
+    <div className="card">
+      <Link to={`/posts/${id}`}>
+        <img src={image} className="card-image" alt="title" />
       </Link>
-      <div className="mb-0 tags">
-        <span>#python,</span> <span>#tech,</span> <span>#git</span>
+      <div className="p-4">
+        <Link
+          to={`/posts/${id}`}
+          className="text-lg post-title lws-RelatedPostTitle"
+        >
+          {title}
+        </Link>
+        <div className="mb-0 tags">
+          <span>#{tags.join(', #')}</span>
+        </div>
+        <p>{createdAt}</p>
       </div>
-      <p>2010-03-27</p>
     </div>
-  </div>
+  );
 }
