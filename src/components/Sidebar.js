@@ -1,8 +1,9 @@
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { filterSelected, sortSelected } from '../features/filter/filterSlice';
 
 export default function Sidebar() {
   const dispatch = useDispatch();
+  const { filter, sort } = useSelector((state) => state.filter);
 
   const handleSortChange = (e) => {
     e.preventDefault();
@@ -21,9 +22,21 @@ export default function Sidebar() {
             className="w-full max-w-[150px] border-2 rounded-md text-gray-500"
             onChange={(e) => handleSortChange(e)}
           >
-            <option value="">Default</option>
-            <option value="newest">Newest</option>
-            <option value="most_liked">Most Liked</option>
+            <option value="" selected={sort === '' ? 'selected' : ''}>
+              Default
+            </option>
+            <option
+              value="newest"
+              selected={sort === 'newest' ? 'selected' : ''}
+            >
+              Newest
+            </option>
+            <option
+              value="most_liked"
+              selected={sort === 'most_liked' ? 'selected' : ''}
+            >
+              Most Liked
+            </option>
           </select>
         </div>
         <div className="sidebar-content">
@@ -35,7 +48,7 @@ export default function Sidebar() {
                 name="filter"
                 id="lws-all"
                 className="radio"
-                defaultChecked
+                defaultChecked={filter === 'lws-all' ? true : false}
                 onChange={(e) => dispatch(filterSelected(e.target.id))}
               />
               <label for="lws-all">All</label>
@@ -46,6 +59,7 @@ export default function Sidebar() {
                 name="filter"
                 id="lws-saved"
                 className="radio"
+                defaultChecked={filter === 'lws-saved' ? true : false}
                 onChange={(e) => dispatch(filterSelected(e.target.id))}
               />
               <label for="lws-saved">Saved</label>
