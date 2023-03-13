@@ -9,6 +9,7 @@ import Loading from '../components/Loading';
 export default function Post() {
   const dispatch = useDispatch();
   const { postId } = useParams();
+
   const { blog, isLoading, isError, error } = useSelector(
     (state) => state.blog
   );

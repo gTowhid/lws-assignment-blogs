@@ -1,4 +1,4 @@
-import { getBlog } from './blogAPI';
+import { getBlog, setBlogLike, setBlogSaved } from './blogAPI';
 
 const { createSlice, createAsyncThunk } = require('@reduxjs/toolkit');
 
@@ -17,37 +17,16 @@ export const fetchBlogAsync = createAsyncThunk('blog/fetchBlog', async (id) => {
 export const updateLikeAsync = createAsyncThunk(
   'blog/updateBlogLike',
   async ({ id, likes }) => {
-    const response = await fetch(`http://localhost:9000/blogs/${id}`, {
-      method: 'PATCH',
-      body: JSON.stringify({
-        likes: likes + 1,
-      }),
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8',
-      },
-    });
-
-    const newblog = await response.json();
-    return newblog;
+    const newlike = await setBlogLike({ id, likes });
+    return newlike;
   }
 );
 
 export const updateSaveAsync = createAsyncThunk(
   'blog/updateBlogSave',
   async ({ id, isSaved }) => {
-    // console.log(blog.getState().blog.blog);
-    const response = await fetch(`http://localhost:9000/blogs/${id}`, {
-      method: 'PATCH',
-      body: JSON.stringify({
-        isSaved: !isSaved,
-      }),
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8',
-      },
-    });
-
-    const newblog = await response.json();
-    return newblog;
+    const newIsSaved = await setBlogSaved({ id, isSaved });
+    return newIsSaved;
   }
 );
 
@@ -70,31 +49,29 @@ const blogSlice = createSlice({
         state.isError = true;
         state.error = action.error?.message;
       })
-      .addCase(updateLikeAsync.pending, (state) => {
-        state.isError = false;
-        state.isLoading = true;
-      })
+      // .addCase(updateLikeAsync.pending, (state) => {
+      //   state.isError = false;
+      //   state.isLoading = true;
+      // })
       .addCase(updateLikeAsync.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.blog = action.payload;
+        state.blog.likes = action.payload;
       })
       .addCase(updateLikeAsync.rejected, (state, action) => {
         state.isLoading = false;
-        state.blog = {};
         state.isError = true;
         state.error = action.error?.message;
       })
-      .addCase(updateSaveAsync.pending, (state) => {
-        state.isError = false;
-        state.isLoading = true;
-      })
+      // .addCase(updateSaveAsync.pending, (state) => {
+      //   state.isError = false;
+      //   state.isLoading = true;
+      // })
       .addCase(updateSaveAsync.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.blog = action.payload;
+        state.blog.isSaved = action.payload;
       })
       .addCase(updateSaveAsync.rejected, (state, action) => {
         state.isLoading = false;
-        state.blog = {};
         state.isError = true;
         state.error = action.error?.message;
       });

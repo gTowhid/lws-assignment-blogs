@@ -1,5 +1,6 @@
 import { useDispatch } from 'react-redux';
 import { updateLikeAsync, updateSaveAsync } from '../features/blog/blogSlice';
+// import { updateLikeAsync } from '../features/like/likeSlice';
 
 export default function DetailedPost({ blog }) {
   const dispatch = useDispatch();
